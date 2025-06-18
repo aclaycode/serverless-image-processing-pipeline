@@ -1,23 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="container">
-      <header className="container-header">
-        <img src={logo} className="container-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="container-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1> Serverless Image Uploader </h1>
+      <p> Select one or more images to upload for processing </p>
+      {/* Upload component */}
+      {/* <ImageUpLoader /> */}
     </div>
   );
 }
