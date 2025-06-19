@@ -1,0 +1,34 @@
+/* ImageDrop.css */
+
+.dropzone {
+  border: 2px dashed #61dafb;
+  padding: 2rem;
+  margin-top: 2rem;
+  background-color: #444;
+  color: #ccc;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.dropzone:hover {
+  background-color: #3a3a3a;
+  cursor: pointer;
+}
+
+.dropzone p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.dropzone ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.dropzone li {
+  color: #9fe2bf;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
