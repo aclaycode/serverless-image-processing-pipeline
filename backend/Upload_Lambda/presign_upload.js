@@ -1,8 +1,9 @@
 // AWS SDK for interacting with AWS services. Don't need to install aws-sdk into directory by using this
 const AWS = require('aws-sdk');
 
-// Initialize S3 client instance. Match region to bucket
-const s3 = new AWS.S3({ region: 'us-east-1' }); // ← Update as needed
+// Initialize S3 client instance. Match region to bucket. Can use east us-east-1 or us-east-2.
+// us-east-1 could have less latency but us-east-2 is better proximity
+const s3 = new AWS.S3({ region: 'us-east-1' });
 
 // Lambda funciton main handler. AWS automatically invokes this function when an event occurs.
 // In this case an S3 file upload.

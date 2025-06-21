@@ -1,7 +1,8 @@
 // AWS SDK for interacting with AWS services. Don't need to install aws-sdk into directory by using this
 const AWS = require('aws-sdk');
 
-const sharp = require('sharp'); // Need to include sharp for image conversion
+// Need to include sharp for image conversion
+const sharp = require('sharp');
 
 // Initialize S3 client instance. Match region to bucket
 const s3 = new AWS.S3();
