@@ -1,4 +1,5 @@
-const AWS = require('aws-sdk'); // AWS SDK for interacting with AWS services. Don't need to install aws-sdk into directory by using this
+// AWS SDK for interacting with AWS services. Don't need to install aws-sdk into directory by using this
+const AWS = require('aws-sdk');
 
 // Initialize S3 client instance. Match region to bucket
 const s3 = new AWS.S3({ region: 'us-east-1' }); // ← Update as needed
