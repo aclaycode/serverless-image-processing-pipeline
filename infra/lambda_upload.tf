@@ -24,7 +24,7 @@ resource "aws_iam_role" "upload_lambda_role_dev" { // image_conversion_role_dev 
 }
 
 // Defines an AWS Lambda function resource using Terraform
-resource "aws_lambda_function" "upload_presign_dev" {
+resource "aws_lambda_function" "upload_function_dev" {
   function_name = "presign_upload_role" // Name of the Lambda function that will appear in AWS Console
   runtime       = "nodejs18.x" // Specify Node.js runtime
   handler       = "presign_upload.handler" // Specify function handler in presignedURL.js
@@ -43,4 +43,15 @@ resource "aws_lambda_function" "upload_presign_dev" {
       UPLOAD_BUCKET = "aclay-upload-image-bucket"
     }
   }
+}
+
+// Outputs the name of the Lambda function to make it accessible from outside this module
+output "lambda_function_name" {
+  value = aws_lambda_function.upload_function_dev.function_name
+}
+
+// Outputs the invoke ARN of the Lambda function
+// This is the full endpoint that API Gateway or other AWS services use to call the function
+output "lambda_invoke_arn" {
+  value = aws_lambda_function.upload_function_dev.invoke_arn
 }

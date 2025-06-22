@@ -30,7 +30,7 @@ resource "aws_lambda_layer_version" "sharp_layer" {
   compatible_runtimes = ["nodejs18.x"] // Specifies which runtimes can use this layer
 
   // Hash of the layer file to detect changes and force redeployment when updated
-  source_code_hash = filebase64sha256("../layers/layers/sharp-layer-master.zip")
+  source_code_hash = filebase64sha256("../layers/sharp-layer-master.zip")
 }
 
 
