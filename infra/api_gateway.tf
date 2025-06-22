@@ -2,6 +2,12 @@
 resource "aws_apigatewayv2_api" "upload_api" {
   name          = "image-upload-api" // Friendly name for the API
   protocol_type = "HTTP" // Specifies this is an HTTP (not WebSocket) API
+
+    cors_configuration {
+    allow_origins = ["*"] // Change to CloudFront domain later
+    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_headers = ["Content-Type"]
+  }
 }
 
 // Connects the Lambda function to API Gateway as a backend integration
@@ -29,8 +35,13 @@ resource "aws_apigatewayv2_stage" "default_stage" {
 
 // Gives API Gateway permission to invoke your Lambda function
 resource "aws_lambda_permission" "allow_apigw_invoke" {
-  statement_id  = "AllowExecutionFromAPIGateway" // Identifier for the permission statement
-  action        = "lambda:InvokeFunction" // Grants permission to invoke the Lambda
-  function_name = aws_lambda_function.upload_function_dev.function_name // The Lambda function being exposed
-  principal     = "apigateway.amazonaws.com" // Grants permission
+  statement_id  = "AllowExecutionFromAPIGatewayV4"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.upload_function_dev.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.upload_api.execution_arn}/*/*"
+
+  depends_on = [
+    aws_apigatewayv2_stage.default_stage
+  ]
 }

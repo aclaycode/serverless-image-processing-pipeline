@@ -25,7 +25,7 @@ resource "aws_iam_role" "output_lambda_role_dev" { // image_conversion_role_dev 
 
 // Define a Lambda Layer resource
 resource "aws_lambda_layer_version" "sharp_layer" {
-  filename = "../layers/layers/sharp-layer-master.zip" // Path to the zipped Sharp layer package
+  filename = "../layers/sharp-layer-master.zip" // Path to the zipped Sharp layer package
   layer_name = "sharp-layer" // Name that will appear for this layer in AWS
   compatible_runtimes = ["nodejs18.x"] // Specifies which runtimes can use this layer
 
