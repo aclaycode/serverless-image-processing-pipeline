@@ -18,15 +18,15 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"] // Allowed HTTP methods
-    cached_methods         = ["GET", "HEAD"] // Methods that CloudFront caches
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"] // Allowed HTTP methods
+    cached_methods         = ["GET", "HEAD", "OPTIONS"] // Methods that CloudFront caches
     target_origin_id       = "frontendS3" // Match the origin_id defined above
-    viewer_protocol_policy = "redirect-to-https" // Redirect HTTP to HTTPS
+    viewer_protocol_policy = "allow-all" // Allow both HTTP and HTTPS
 
     forwarded_values {
-      query_string = false // Don’t forward query strings to origin
+      query_string = true // Forward query strings to origin
       cookies {
-        forward = "none" // Don’t forward cookies to origin
+        forward = "all" // Forward all cookies to origin
       }
     }
   }

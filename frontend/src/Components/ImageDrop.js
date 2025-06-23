@@ -11,6 +11,9 @@ function ImageDrop() {
   // Track upload results (success/failure messages) for each file
   const [uploadStatus, setUploadStatus] = useState('');
 
+  // Store URLs for the converted PNGs
+  const [convertedUrls, setConvertedUrls] = useState([]);
+
   // triggered when user drops files onto the dropzone
   const handleDrop = (e) => {
     e.preventDefault(); // prevent the browser from opening the file
@@ -34,6 +37,7 @@ function ImageDrop() {
     setFiles(accepted); // Update state with accepted files
     setError(rejected.length > 0 ? `Unsupported file type(s): ${rejected.join(', ')}` : '');
     setUploadStatus('');
+    setConvertedUrls([]); // Clear previous converted image links
   };
 
   // Required to allow dropping files—otherwise the browser just blocks it
@@ -43,7 +47,7 @@ function ImageDrop() {
 
   // Call your backend to get the presigned URL
   const getPresignedUrl = async (fileName) => {
-    
+
     // HTTP response object. NOT the actual data. fetch sends a GET request.
     // API endpoint is injected via environment variable (REACT_APP_UPLOAD_API_URL)
     // In production, this will be dynamically populated by Terraform/GitHub Actions
@@ -80,6 +84,14 @@ function ImageDrop() {
 
       // State setter function to show upload status of files. Created with useState() in React
       setUploadStatus(prev => prev + `Uploaded: ${file.name}\n`);
+
+      // Construct the expected .png URL
+      const outputUrl = `https://aclay-output-image-bucket.s3.amazonaws.com/${file.name.replace(/\.[^.]+$/, '.png')}`;
+
+      // Delay to give Lambda time to process
+      setTimeout(() => {
+        setConvertedUrls(prev => [...prev, outputUrl]);
+      }, 4000);
 
     } catch (err) {
       console.error(err);
@@ -119,6 +131,20 @@ function ImageDrop() {
         <pre style={{ whiteSpace: 'pre-wrap', color: 'green', marginTop: '1em' }}>
           {uploadStatus}
         </pre>
+      )}
+
+      {/* Display links to converted PNGs */}
+      {convertedUrls.length > 0 && (
+        <div style={{ marginTop: '1em' }}>
+          <h4>Converted PNG Files:</h4>
+          <ul>
+            {convertedUrls.map((url, index) => (
+              <li key={index}>
+                <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

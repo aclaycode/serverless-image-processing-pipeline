@@ -8,12 +8,16 @@ const s3 = new AWS.S3({ region: 'us-east-1' });
 // Lambda funciton main handler. AWS automatically invokes this function when an event occurs.
 // In this case an S3 file upload.
 exports.handler = async (event) => {
+  console.log('Lambda invoked'); // Log for CloudWatch to confirm Lambda is running
+
   try {
     const query = event.queryStringParameters || {}; // Get string parameters from request
     const fileName = query.fileName || 'upload.jpg'; // Get file name from query string
 
     // Use an environment variable for input S3 bucket. Need to define in terraform later
     const bucket = process.env.UPLOAD_BUCKET;
+    console.log('Target bucket:', bucket); // Log bucket name
+    console.log('Requested fileName:', fileName); // Log file name
 
     // Tells S3 file types to expect. S3 associates MIME type
     const contentType = 'image/jpeg';
@@ -28,6 +32,7 @@ exports.handler = async (event) => {
 
     // Generate presigned URL
     const uploadUrl = await s3.getSignedUrlPromise('putObject', params);
+    console.log('Generated presigned URL:', uploadUrl); // Log generated URL
 
     // Return URL in JSON response so client can upload file
     return {

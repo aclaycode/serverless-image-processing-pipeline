@@ -23,16 +23,15 @@ resource "aws_iam_role" "output_lambda_role_dev" { // image_conversion_role_dev 
   })
 }
 
-// Define a Lambda Layer resource
-resource "aws_lambda_layer_version" "sharp_layer" {
-  filename = "../layers/sharp-layer-master.zip" // Path to the zipped Sharp layer package
-  layer_name = "sharp-layer" // Name that will appear for this layer in AWS
-  compatible_runtimes = ["nodejs18.x"] // Specifies which runtimes can use this layer
-
-  // Hash of the layer file to detect changes and force redeployment when updated
-  source_code_hash = filebase64sha256("../layers/sharp-layer-master.zip")
-}
-
+# // Define a Lambda Layer resource
+# resource "aws_lambda_layer_version" "sharp_layer" {
+#   filename = "../layers/sharp-layer-master.zip" // Path to the zipped Sharp layer package
+#   layer_name = "sharp-layer" // Name that will appear for this layer in AWS
+#   compatible_runtimes = ["nodejs18.x"] // Specifies which runtimes can use this layer
+#
+#   // Hash of the layer file to detect changes and force redeployment when updated
+#   source_code_hash = filebase64sha256("../layers/sharp-layer-master.zip")
+# }
 
 // Defines an AWS Lambda function resource using Terraform
 resource "aws_lambda_function" "output_dev" {
@@ -47,10 +46,13 @@ resource "aws_lambda_function" "output_dev" {
   // Path to the zipped deployment package containing your Lambda code
   filename      = "../backend/Output_Lambda/output_function.zip"
 
-  // Attach the Sharp layer (public or custom ARN)
-  layers = [
-    aws_lambda_layer_version.sharp_layer.arn
-  ]
+  timeout       = 30 // Extended timeout for image processing
+  memory_size   = 512
+
+  # // Attach the Sharp layer (public or custom ARN)
+  # layers = [
+  #   aws_lambda_layer_version.sharp_layer.arn
+  # ]
 
   // Environment variables passed into the Lambda function
   environment {
@@ -59,4 +61,26 @@ resource "aws_lambda_function" "output_dev" {
       OUTPUT_BUCKET = "aclay-output-image-bucket"
     }
   }
+}
+
+// Configure S3 bucket notification to trigger Lambda on any object upload.
+// File-type filtering happens inside the Lambda code
+resource "aws_s3_bucket_notification" "trigger_output_lambda" {
+  bucket = "aclay-upload-image-bucket"  // Input bucket (not the output one)
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.output_dev.arn
+    events              = ["s3:ObjectCreated:*"]
+  }
+
+  depends_on = [aws_lambda_permission.allow_s3_invoke]
+}
+
+// Allow the input bucket to invoke the Lambda function
+resource "aws_lambda_permission" "allow_s3_invoke" {
+  statement_id  = "AllowS3Invoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.output_dev.function_name
+  principal     = "s3.amazonaws.com"
+  source_arn    = "arn:aws:s3:::aclay-upload-image-bucket"
 }
