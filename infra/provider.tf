@@ -10,5 +10,5 @@ terraform {
 
 provider "aws" {
   region  = "us-east-1"
-//  profile = "image-pipeline-deployer" // ensures correct IAM identity is used
+//  profile = "image-pipeline-deployer" // ensures correct IAM identity is used.
 }
