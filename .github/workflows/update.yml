@@ -3,7 +3,7 @@ name: Auto Deploy
 on:
   push:
     branches:
-      - test-terraform-gha
+      - main
 
 jobs:
   terraform:
