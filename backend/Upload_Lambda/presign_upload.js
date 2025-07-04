@@ -44,7 +44,7 @@ exports.handler = async (event) => {
     console.error('Failed to generate pre-signed URL:', err); // Logs error to AWS CloudWatch logs
     return {
       statusCode: 500, // Internal service error HTTP code
-      body: JSON.stringify({ error: 'Could not generate upload URL' }) // Error message sent over HTTP
+      body: JSON.stringify({ error: 'Could not generate upload URL' }) // Error message sent over HTTP.
     };
   }
 };
