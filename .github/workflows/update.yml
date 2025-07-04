@@ -1,31 +1,31 @@
-# name: Auto Deploy
+name: Auto Deploy
 
-# on:
-#   push:
-#     branches:
-#       - test-terraform-gha
+on:
+  push:
+    branches:
+      - test-terraform-gha
 
-# jobs:
-#   terraform:
-#     runs-on: ubuntu-latest
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v4 # Clones repo into the runner
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 # Clones repo into the runner
 
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v3 # Installs Terraform in runner environment
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3 # Installs Terraform in runner environment
 
-#     - name: Terraform Init
-#       run: terraform init # Initializes Terraform in working directory
-#       working-directory: ./infra
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Terraform Init
+      run: terraform init # Initializes Terraform in working directory
+      working-directory: ./infra
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-#     - name: Terraform Apply
-#       run: terraform apply -auto-approve
-#       working-directory: ./infra
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: ./infra
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
