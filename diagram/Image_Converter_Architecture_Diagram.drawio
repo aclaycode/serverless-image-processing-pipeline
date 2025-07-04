@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.2.0">
+  <diagram name="Page-1" id="M7Nv4D_M4CwDMcb3Wskp">
+    <mxGraphModel dx="1580" dy="879" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#FFFFFF,#030303)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-1" value="Frontend&lt;div&gt;(Stored on S3, Delivered globally via CloudFront&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-2" value="API Gateway" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-3" value="Lambda (provides pre-signed URL for image upload)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-4" value="Frontend" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-5" value="S3 Input Bucket" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=light-dark(#000000,#FFFFFF);" parent="1" source="NJZbky64yUJ3h-G3UNd4-1" target="NJZbky64yUJ3h-G3UNd4-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="150" as="sourcePoint" />
+            <mxPoint x="500" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=light-dark(#000000,#FFFFFF);entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NJZbky64yUJ3h-G3UNd4-2" target="NJZbky64yUJ3h-G3UNd4-3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="230" as="sourcePoint" />
+            <mxPoint x="420" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=light-dark(#000000,#FFFFFF);entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="NJZbky64yUJ3h-G3UNd4-3" target="NJZbky64yUJ3h-G3UNd4-4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="485" y="330" as="sourcePoint" />
+            <mxPoint x="430" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NJZbky64yUJ3h-G3UNd4-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=light-dark(#000000,#FFFFFF);" parent="1" source="NJZbky64yUJ3h-G3UNd4-4" target="NJZbky64yUJ3h-G3UNd4-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="420" as="sourcePoint" />
+            <mxPoint x="540" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-1" value="Generate pre-signed URL" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="265" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="tz-h5lC0XfIbsgwfJbqe-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="280" as="sourcePoint" />
+            <mxPoint x="460" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-3" value="Returns pre-signed PUT URL to frontend" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="320" width="185" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-4" value="Sends GET request for pre-signed PUT URL (1st event)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="496.25" y="65" width="275" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-5" value="PUT request directly uploads image(s) to S3 input bucket" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="385" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-6" value="Lambda (separate lambda for image processing)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="NJZbky64yUJ3h-G3UNd4-5" target="tz-h5lC0XfIbsgwfJbqe-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="660" as="sourcePoint" />
+            <mxPoint x="430" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-8" value="S3 event (image upload) triggers lambda function. This is the 2nd event" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="496.25" y="500" width="293.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-9" value="Accept request, route to lambda function" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="495" y="165" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-10" value="S3 Output Bucket" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="700" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-12" value="Link to converted image file displayed on frontend (Static S3 object URL configured with public-read access)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="316" y="825" width="217.5" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.469;exitY=1.04;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.473;entryY=0.028;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tz-h5lC0XfIbsgwfJbqe-6" target="tz-h5lC0XfIbsgwfJbqe-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="760" as="sourcePoint" />
+            <mxPoint x="530" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tz-h5lC0XfIbsgwfJbqe-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="840" as="sourcePoint" />
+            <mxPoint x="425" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tz-h5lC0XfIbsgwfJbqe-15" value="Use Sharp package to convert image type. Upload converted image S3 output bucket" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="605" width="240" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
