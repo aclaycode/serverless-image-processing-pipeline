@@ -18,7 +18,7 @@ This full-stack serverless application converts `.jpg` or `.jpeg` image files to
 
 ## Tech Stack
 
-This project uses a modern serverless and containerized stack:
+This project uses a modern serverless architecture:
 
 - **Frontend**:  
   Built with React for a fast, responsive drag-and-drop user interface.
