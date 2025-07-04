@@ -1,6 +1,6 @@
 # Serverless Image Processing Pipeline
 
-This full-stack serverless application converts `.jpg` or `.jpeg` image files to `.png` format using AWS Lambda, S3, and other cloud services. The frontend is built with React, the backend uses Node.js-based Lambda functions, and the infrastructure is defined in Terraform with CI/CD via GitHub Actions. The architecture is event-driven and globally delivered through S3 and CloudFront.
+This full-stack serverless application converts .jpg/.jpeg image files to .png format using AWS Lambda, S3, and other cloud services. The frontend is built with React, the backend uses Node.js-based Lambda functions, and the infrastructure is defined in Terraform with CI/CD via GitHub Actions. The architecture is event-driven and globally delivered through S3 and CloudFront.
 
 **Use the Image Converter Here**: [Image Converter](https://dlp3grxh7samf.cloudfront.net)
 
