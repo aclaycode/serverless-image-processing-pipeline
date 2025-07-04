@@ -60,6 +60,10 @@ This project uses a modern serverless and containerized stack:
   - **DynamoDB** – used to safely lock Terraform state during concurrent deployments
 
 ---
+## Architecture
+
+
+-----
 
 ## System Flow
 
