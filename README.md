@@ -77,7 +77,7 @@ This application uses an event-driven architecture to fully automate image uploa
    The converted `.png` file is compressed using Sharp's compression level of 9 setting to reduce file size without losing image quality, with a slight increase in processing time as a tradeoff.
 
 3. **Output Handling and Public Access**  
-   The converted `.png` image is saved to an **output S3 bucket** and marked with public-read access. The frontend constructs and displays the expected public URL for each file, enabling preview and download.
+   The converted `.png` image is saved to an **output S3 bucket**, and an **object-level ACL** is applied with `public-read` permission. This grants anyone on the internet the ability to view the file without credentials. The frontend constructs and displays the expected public URL for each file, enabling preview and download.
 
 4. **Frontend Hosting and Global Delivery**  
    The React frontend is deployed as static assets in an **S3 bucket**, and distributed worldwide using Cloudfront for low-latency access.
@@ -89,23 +89,13 @@ This application uses an event-driven architecture to fully automate image uploa
    Uploads are performed using **pre-signed S3 URLs** that expire after 60 seconds, ensuring temporary and secure upload access from the client browser only.
 
 
-
 ---
 
 ## CI/CD
 
 - **Terraform** uses a remote S3 backend with **DynamoDB for state locking**.
-- The **React frontend** is deployed to S3 and served via CloudFront.
-- **GitHub Actions** triggers deployment on every push (AWS credential are managed securely with GitHub secrets)
+- **GitHub Actions** triggers Terraform deployments on every push to the main branch, with AWS credentials managed securely via GitHub Secrets.
 ![GitHub Actions Screenshot](https://github.com/aclaycode/serverless-image-processing-pipeline/blob/7c2296c5c9084b17e3f51291d8a058d3510457b3/README%20Images/GitHub_Actions_Integration.png)
-
----
-
-## Notes
-
-- Lambda logs are available in **CloudWatch Logs**.
-- Converted images are publicly accessible via `public-read` ACLs.
-- Some AWS settings (IAM roles, S3 policies, event triggers) were configured manually during development.
 
 ---
 ## Lessons Learned & Key Takeaways
@@ -113,11 +103,11 @@ This application uses an event-driven architecture to fully automate image uploa
 This project provided valuable hands-on experience across AWS services, infrastructure-as-code, image processing, and CI/CD pipelines. Here are some of the major challenges I encountered and what I learned from them:
 
 - **AWS Service Permissions & Terraform Deployment**   
-  Getting Terraform to successfully deploy the project’s AWS infrastructure for most if not all AWS services used in this project. Many permissions and resource policies had to be manually created or modified in the AWS Console during initial development to resolve deployment errors and access issues. While not ideal, this process gave me greater familiarity with the AWS Console and highlighted how precise and granular AWS permission management needs to be, especially when designing with least-privilege in mind.
+  Getting Terraform to successfully deploy the project’s AWS infrastructure for most of the AWS services used in this project. Many permissions and resource policies had to be manually created or modified in the AWS Console during initial development to resolve deployment errors and access issues. While not ideal, this process gave me greater familiarity with the AWS Console and highlighted how precise and granular AWS permission management needs to be, especially when designing with least-privilege in mind.
 
 - **Native Package Compatibility & Runtime Debugging**  
-  The image processing function initially failed silently. Images uploaded fine, but no .png files appeared in the output S3 bucket. By adding logging to the Lambda function and reviewing logs in CloudWatch, I discovered the issue stemmed from the Sharp package, which relies on native binaries that must match the Lambda runtime. I first attempted to use Sharp as a Lambda layer but couldn’t get it working. Ultimately, I bundled Sharp into the image processing Lambda directory and used Docker to install a compatible version directly into `node_modules`, simulating the Lambda environment. This required multiple trial-and-error deployments but taught me how to manage native dependencies in serverless workflows effectively.
+  The image processing function initially failed silently. Images uploaded fine, but no .png files appeared in the output S3 bucket. By adding logging to the Lambda function and reviewing logs in CloudWatch, I discovered the issue stemmed from the Sharp package, which relies on native binaries that must match the Lambda runtime. I first attempted to use Sharp as a Lambda layer but couldn’t get it working. Ultimately, I bundled Sharp into the image processing Lambda directory and used Docker to install a compatible version directly into `node_modules`, simulating the Lambda environment. This required multiple trial-and-error deployments to verify a compatible Sharp installation but taught me how to manage native dependencies in serverless workflows effectively.
 
 - **GitHub Actions Integration & State Locking with DynamoDB**  
-  After deploying the infrastructure manually with Terraform, I later introduced GitHub Actions to automate future updates. Because the initial deployment was done outside of CI/CD, GitHub Actions couldn’t track the existing state, which led to workflow conflicts and potential drift. To fix this, I configured a remote backend in S3 and set up a DynamoDB table to enable state locking. This allowed Terraform to safely share and lock state across environments, making GitHub Actions deployments consistent and reliable going forward.
+  After deploying the infrastructure manually with Terraform, I later introduced GitHub Actions to automate future updates. Because the initial deployment was done outside of CI/CD, GitHub Actions couldn’t track the existing state, which led to workflow conflicts/errors. To fix this, I configured a remote backend in S3 and set up a DynamoDB table to enable state locking. This allowed Terraform to safely share and lock state across environments, making GitHub Actions deployments consistent and reliable going forward.
 
