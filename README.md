@@ -61,7 +61,7 @@ This project uses a modern serverless and containerized stack:
 
 ---
 ## Architecture
-
+![Architecture Diagram](https://github.com/aclaycode/serverless-image-processing-pipeline/blob/0a0526b6134321f7aa95052327b1385175950101/diagram/Image_Converter_Architecture_Diagram.png)
 
 -----
 
@@ -69,32 +69,34 @@ This project uses a modern serverless and containerized stack:
 
 This application uses an event-driven architecture to fully automate image uploads, processing, and delivery:
 
-1. **User Upload via React Frontend**  
-   A React-based drag-and-drop interface allows users to select `.jpg` or `.jpeg` images. On upload, the app calls a Lambda function (via API Gateway) to get a **pre-signed S3 URL**. The file is uploaded via `PUT` to an **input S3 bucket**.
+1. **User Interaction via React Frontend**  
+   Users drag and drop one or more `.jpg` or `.jpeg` images into the browser interface. After confirming their selection, they click the **"Upload Files"** button. This triggers the frontend to request a pre-signed S3 URL (via API Gateway → Lambda), then upload each image directly to the **input S3 bucket** using a `PUT` request.
 
 2. **Image Conversion Triggered by S3 Event**  
-   Once uploaded, the S3 bucket automatically triggers another **Lambda function**. This function uses the **Sharp** image processing library to convert the image to `.png` format.
+   Once an image is uploaded, the input bucket automatically triggers a **Lambda function** via an S3 event. This function fetches the file and uses the **Sharp** image processing library to convert it to `.png` format entirely in memory.  
+   The converted `.png` file is compressed using Sharp's compression level of 9 setting to reduce file size without losing image quality, with a slight increase in processing time as a tradeoff.
 
 3. **Output Handling and Public Access**  
-   The converted `.png` file is saved to a separate **output S3 bucket** with `public-read` access. The front end displays a **public URL** to the converted image, enabling direct preview and download.
+   The converted `.png` image is saved to an **output S3 bucket** and marked with public-read access. The frontend constructs and displays the expected public URL for each file, enabling preview and download.
 
-4. **Frontend Hosting and Delivery**  
-   The React frontend is hosted using **S3 static website hosting** and distributed globally using **CloudFront**.
+4. **Frontend Hosting and Global Delivery**  
+   The React frontend is deployed as static assets in an **S3 bucket**, and distributed worldwide using Cloudfront for low-latency access.
 
 5. **Infrastructure and Deployment**  
-   All resources (Lambda, S3, IAM, CloudFront, API Gateway, DynamoDB) are provisioned using **Terraform**. AWS configurations such as IAM permissions and S3 access controls were fine-tuned manually during development.
+   AWS resources—including Lambda functions, S3 buckets, API Gateway, CloudFront, IAM role—are provisioned using Terraform. Additional AWS access policies were refined manually during development for security and interoperability.
 
 6. **Security**  
-   The pre-signed S3 URLs are **valid for 60 seconds**, ensuring time-limited, secure uploads.
+   Uploads are performed using **pre-signed S3 URLs** that expire after 60 seconds, ensuring temporary and secure upload access from the client browser only.
+
+
 
 ---
 
 ## CI/CD
 
 - **Terraform** uses a remote S3 backend with **DynamoDB for state locking**.
-- AWS credentials are managed securely with **GitHub Secrets**.
 - The **React frontend** is deployed to S3 and served via CloudFront.
-- **GitHub Actions** triggers deployment on every push.
+- **GitHub Actions** triggers deployment on every push (AWS credential are managed securely with GitHub secrets)
 ![GitHub Actions Screenshot](https://github.com/aclaycode/serverless-image-processing-pipeline/blob/7c2296c5c9084b17e3f51291d8a058d3510457b3/README%20Images/GitHub_Actions_Integration.png)
 
 ---
@@ -111,10 +113,10 @@ This application uses an event-driven architecture to fully automate image uploa
 This project provided valuable hands-on experience across AWS services, infrastructure-as-code, image processing, and CI/CD pipelines. Here are some of the major challenges I encountered and what I learned from them:
 
 - **AWS Service Permissions & Terraform Deployment**   
-  Getting Terraform to successfully deploy the project’s AWS infrastructure—specifically for IAM, Lambda, and S3—required several iterations. Many permissions and resource policies had to be manually created or modified in the AWS Console during initial development to resolve deployment errors and access issues. While not ideal, this process gave me greater familiarity with the AWS Console and highlighted how precise and granular AWS permission management needs to be, especially when designing with least-privilege in mind.
+  Getting Terraform to successfully deploy the project’s AWS infrastructure for most if not all AWS services used in this project. Many permissions and resource policies had to be manually created or modified in the AWS Console during initial development to resolve deployment errors and access issues. While not ideal, this process gave me greater familiarity with the AWS Console and highlighted how precise and granular AWS permission management needs to be, especially when designing with least-privilege in mind.
 
 - **Native Package Compatibility & Runtime Debugging**  
-  The image processing function initially failed silently—images uploaded fine, but no `.png` files appeared in the output S3 bucket. By adding logging to the Lambda function and reviewing logs in CloudWatch, I discovered the issue stemmed from the Sharp package, which relies on native binaries that must match the Lambda runtime. I first attempted to use Sharp as a Lambda layer but couldn’t get it working. Ultimately, I bundled Sharp into the image processing Lambda directory and used Docker to install a compatible version directly into `node_modules`, simulating the Lambda environment. This required multiple trial-and-error deployments but taught me how to manage native dependencies in serverless workflows effectively.
+  The image processing function initially failed silently. Images uploaded fine, but no .png files appeared in the output S3 bucket. By adding logging to the Lambda function and reviewing logs in CloudWatch, I discovered the issue stemmed from the Sharp package, which relies on native binaries that must match the Lambda runtime. I first attempted to use Sharp as a Lambda layer but couldn’t get it working. Ultimately, I bundled Sharp into the image processing Lambda directory and used Docker to install a compatible version directly into `node_modules`, simulating the Lambda environment. This required multiple trial-and-error deployments but taught me how to manage native dependencies in serverless workflows effectively.
 
 - **GitHub Actions Integration & State Locking with DynamoDB**  
   After deploying the infrastructure manually with Terraform, I later introduced GitHub Actions to automate future updates. Because the initial deployment was done outside of CI/CD, GitHub Actions couldn’t track the existing state, which led to workflow conflicts and potential drift. To fix this, I configured a remote backend in S3 and set up a DynamoDB table to enable state locking. This allowed Terraform to safely share and lock state across environments, making GitHub Actions deployments consistent and reliable going forward.
